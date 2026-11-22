@@ -1,0 +1,122 @@
+import java.util.Scanner;
+class Distance 
+{
+    private int feet;
+    private float inches;
+    public Distance() {
+        this.feet = 0;
+        this.inches = 0.0f;
+    }
+    public Distance(int feet, float inches) 
+    {
+        this.feet = feet;
+        this.inches = inches;
+        normalize();
+    }
+    private void normalize() 
+   {
+        while (this.inches >= 12.0f) 
+   {
+            this.inches -= 12.0f;
+            this.feet++;
+        }
+    }
+    public void getDist(Scanner sc)
+   {
+        System.out.print("Enter feet: ");
+        this.feet = sc.nextInt();
+        System.out.print("Enter inches: ");
+        this.inches = sc.nextFloat();
+        normalize();
+    }
+    public void showDist() 
+   {
+        System.out.println(this.feet + " feet, " + this.inches + " inches");
+    }
+    public float toTotalInches() 
+   {
+        return (this.feet * 12.0f) + this.inches;
+    }
+    public Distance addDist(Distance d2) 
+   {
+        Distance temp = new Distance();
+        temp.feet = this.feet + d2.feet;
+        temp.inches = this.inches + d2.inches;
+        temp.normalize();
+        return temp;
+    }
+    public Distance subDist(Distance d2) 
+   {
+        Distance temp = new Distance();
+        float total1 = this.toTotalInches();
+        float total2 = d2.toTotalInches();
+        float diff;
+        if (total1 < total2) 
+    {
+            System.out.println("Note: First distance is smaller than second.");
+            diff = total2 - total1;
+        } else {
+            diff = total1 - total2;
+        }
+        temp.feet = (int) (diff / 12);
+        temp.inches = diff - (temp.feet * 12);
+        return temp;
+    }
+    public void compareDist(Distance d2) 
+    {
+        float total1 = this.toTotalInches();
+        float total2 = d2.toTotalInches();
+        if (total1 > total2) {
+            System.out.println("First distance is greater.");
+        } else if (total2 > total1) {
+            System.out.println("Second distance is greater.");
+        } else {
+            System.out.println("Both distances are equal.");
+        }
+    }
+}
+public class Task02 
+{
+    public static void main(String[] args) 
+{
+        Scanner sc = new Scanner(System.in);
+        Distance d1 = new Distance();
+        Distance d2 = new Distance();
+        Distance result;
+        System.out.println("Distance Calculator");
+        System.out.println("Enter First Distance:");
+        d1.getDist(sc);
+        System.out.println("\nEnter Second Distance:");
+        d2.getDist(sc);
+        System.out.println("\nSelect Operation:");
+        System.out.println("1. Add Distances");
+        System.out.println("2. Subtract Distances");
+        System.out.println("3. Compare Distances");
+        System.out.println("4. Convert Both to Total Inches");
+        System.out.print("Enter your choice (1-4): ");
+        int choice = sc.nextInt();
+        System.out.println("\nResult:");
+        switch (choice) {
+            case 1:
+                result = d1.addDist(d2);
+                System.out.print("Sum = ");
+                result.showDist();
+                break;
+            case 2:
+                result = d1.subDist(d2);
+                System.out.print("Difference = ");
+                result.showDist();
+                break;
+            case 3:
+                d1.compareDist(d2);
+                break;
+            case 4:
+                System.out.println("First Distance in total inches = " + d1.toTotalInches() + " inches");
+                System.out.println("Second Distance in total inches = " + d2.toTotalInches() + " inches");
+                break;
+            default:
+                System.out.println("Invalid choice!");
+        }
+        sc.close();
+    }
+}
